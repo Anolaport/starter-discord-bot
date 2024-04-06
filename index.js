@@ -57,6 +57,16 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
       }catch(e){
         console.log(e)
       }
+	     if(interaction.data.name == 'say'){
+      const text = interaction.data.options.find(option => option.name === 'text').value;
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: text,
+        },
+      });
+    }
+  }
 
       return res.send({
         // https://discord.com/developers/docs/interactions/receiving-and-responding#responding-to-an-interaction
@@ -72,7 +82,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
 
 
 
-app.get('/register_commands', async (req,res) =>{
+app.get('/register_commands', async (req, res) =>{
   let slash_commands = [
     {
       "name": "yo",
@@ -83,10 +93,21 @@ app.get('/register_commands', async (req,res) =>{
       "name": "dm",
       "description": "sends user a DM",
       "options": []
+    },
+    {
+      "name": "say",
+      "description": "Repeats what you say",
+      "options": [
+        {
+          "name": "text",
+          "description": "Text to repeat",
+          "type": 3, // String type
+          "required": true
+        }
+      ]
     }
   ]
-  try
-  {
+  try {
     // api docs - https://discord.com/developers/docs/interactions/application-commands#create-global-application-command
     let discord_response = await discord_api.put(
       `/applications/${APPLICATION_ID}/guilds/${GUILD_ID}/commands`,
@@ -94,7 +115,7 @@ app.get('/register_commands', async (req,res) =>{
     )
     console.log(discord_response.data)
     return res.send('commands have been registered')
-  }catch(e){
+  } catch(e) {
     console.error(e.code)
     console.error(e.response?.data)
     return res.send(`${e.code} error from discord`)
