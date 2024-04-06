@@ -1,3 +1,38 @@
+const { exec } = require('child_process');
+const express = require('express');
+
+// Function to run npm install
+const runNpmInstall = () => {
+    exec('npm install', (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.error(`stderr: ${stderr}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+        // Call your application startup function here
+        startApplication();
+    });
+}
+
+// Function to start your Express application
+const startApplication = () => {
+    const app = express();
+
+    // Define your routes and other application logic here
+
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}
+
+// Call the function to run npm install
+runNpmInstall();
+
 {
   "name": "starter-discord-bot",
   "version": "1.0.0",
