@@ -88,12 +88,10 @@ app.get('/register_commands', async (req, res) =>{
     {
       "name": "yo",
       "description": "replies with Yo!",
-      "options": []
     },
     {
       "name": "dm",
       "description": "sends user a DM",
-      "options": []
     },
     {
       "name": "say",
