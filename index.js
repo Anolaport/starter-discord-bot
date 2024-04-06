@@ -57,16 +57,6 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
       }catch(e){
         console.log(e)
       }
-	     if(interaction.data.name == 'say'){
-      const text = interaction.data.options.find(option => option.name === 'text').value;
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          content: text,
-        },
-      });
-    }
-  }
 
       return res.send({
         // https://discord.com/developers/docs/interactions/receiving-and-responding#responding-to-an-interaction
@@ -79,6 +69,17 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
   }
 
 });
+	     if(interaction.data.name == 'say'){
+      const text = interaction.data.options.find(option => option.name === 'text').value;
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: text,
+        },
+      });
+    }
+  }
+
 
 
 
